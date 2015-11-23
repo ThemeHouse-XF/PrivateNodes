@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="ThemeHouse_PrivateNodes" title="[⌂] Private Nodes" version_string="1.0.0" version_id="1447261019" url="http://xf.themehouse.io/" install_callback_class="ThemeHouse_Install" install_callback_method="install" uninstall_callback_class="ThemeHouse_Install" uninstall_callback_method="uninstall">
+  <admin_navigation>
+    <navigation navigation_id="privateNodes" parent_navigation_id="nodeTree" display_order="15" link="nodes/private" admin_permission_id="node" debug_only="0" hide_no_children="0"/>
+  </admin_navigation>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates>
+    <template title="th_node_list_privatenodes"><![CDATA[<xen:title>{xen:phrase th_private_nodes_privatenodes}</xen:title>
+
+<xen:require css="filter_list.css" />
+<xen:require js="js/xenforo/filter_list.js" />
+
+<xen:form action="{xen:adminlink node-permissions/toggle-private}" class="section">
+	<xen:if is="{$nodes}">
+
+		<h2 class="subHeading">
+			<xen:include template="filter_list_controls" />
+			{xen:phrase nodes}
+		</h2>
+		
+		<xen:set var="$nodeCount">{xen:count $nodes, false}</xen:set>
+
+		<ol class="FilterList Scrollable">
+			<xen:foreach loop="$nodes" value="$node">
+				<xen:listitem
+					id="{$node.node_id}"
+					label="{$node.title}"
+					snippet="{$node.node_type}"
+					href="{xen:adminlink 'nodes/edit', $node}"
+					class="_depth{$node.depth}"
+					delete="{xen:adminlink 'nodes/delete', $node}"
+					toggle="{$privateNodes.{$node.node_id}}"
+					toggletitle="{xen:phrase enable_disable_x, 'title={$node.title}'}">
+					<xen:html>
+						<a href="{xen:adminlink 'node-permissions', $node}" class="secondaryContent {xen:if {$nodesWithPerms.{$node.node_id}}, 'hasPermissions'}">{xen:phrase permissions}</a>
+					</xen:html>
+				</xen:listitem>
+			</xen:foreach>
+		</ol>
+
+		<p class="sectionFooter">{xen:phrase showing_x_of_y_items, 'count=<span class="FilterListCount">{xen:count $nodes}</span>', 'total={xen:count $nodes}'}</p>
+
+	<xen:else />
+
+		<div class="noResults">{xen:phrase there_no_nodes_defined}</div>
+
+	</xen:if>
+</xen:form>]]></template>
+  </admin_templates>
+  <admin_template_modifications/>
+  <code_events/>
+  <code_event_listeners>
+    <listener event_id="controller_pre_dispatch" execute_order="10" callback_class="ThemeHouse_Listener_ControllerPreDispatch" callback_method="controllerPreDispatch" active="1" hint="" description=""/>
+    <listener event_id="file_health_check" execute_order="10" callback_class="ThemeHouse_PrivateNodes_Listener_FileHealthCheck" callback_method="fileHealthCheck" active="1" hint="" description=""/>
+    <listener event_id="init_dependencies" execute_order="10" callback_class="ThemeHouse_Listener_InitDependencies" callback_method="initDependencies" active="1" hint="" description=""/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_PrivateNodes_Listener_LoadClass" callback_method="loadClassController" active="0" hint="XenForo_ControllerAdmin_Node" description="XenForo_ControllerAdmin_Node (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_PrivateNodes_Listener_LoadClass" callback_method="loadClassController" active="0" hint="XenForo_ControllerAdmin_Permission_Node" description="XenForo_ControllerAdmin_Permission_Node (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class_controller" execute_order="10" callback_class="ThemeHouse_PrivateNodes_Listener_LoadClass" callback_method="loadClassController" active="1" hint="" description="(For XenForo 1.1 and below)" compatibility_switch="1"/>
+  </code_event_listeners>
+  <cron/>
+  <email_templates/>
+  <email_template_modifications/>
+  <optiongroups/>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases>
+    <phrase title="admin_navigation_privateNodes" version_id="1403679887" version_string="1.0.0"><![CDATA[Private Nodes]]></phrase>
+    <phrase title="th_private_nodes_privatenodes" version_id="1403622377" version_string="1.0.0"><![CDATA[Private Nodes]]></phrase>
+  </phrases>
+  <route_prefixes/>
+  <style_properties/>
+  <templates/>
+  <public_template_modifications>
+    <modification template="footer" modification_key="th_copyrightNotice_privateNodes" description="Copyright notice for [⌂] Private Nodes" execution_order="1" enabled="1" action="callback">
+      <find><![CDATA[/{xen:phrase (?:xenforo|extra)_copyright}/]]></find>
+      <replace><![CDATA[ThemeHouse_Listener_InitDependencies::copyrightNotice]]></replace>
+    </modification>
+  </public_template_modifications>
+  <bb_code_media_sites/>
+  <bb_codes/>
+</addon>
